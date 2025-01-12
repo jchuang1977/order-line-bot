@@ -1,5 +1,5 @@
 //認證身份 channel_access_token
-var CHANNEL_ACCESS_TOKEN='338nO8hVm6Alyyrn72gud7xGzsBljI2C14HihcQHJOTfD2r0GljYCYL2hVR5ONBspnEa7HVxdJIy7AKF+iF3BJbFHe/rBoYhVkvFbwZS/sQiXCWowvFoXJVLOEP/QSXbrvu3380LpUSAau53q5pc9AdB04t89/1O/w1cDnyilFU=' //輸入自己 LINE BOT 的 channel_access_token
+var CHANNEL_ACCESS_TOKEN='' //輸入自己 LINE BOT 的 channel_access_token
 
 
 
@@ -114,10 +114,10 @@ function doPost(e)  {  //當網頁有Post請求時就會依據網址來執行這
     * 將 sheet_url 改成你的 Google sheet 網址
     * 將 sheet_name 改成你的工作表名稱
     */
-    const sheet_url = 'https://docs.google.com/spreadsheets/d/1pDSezVNvHjeMcVwEi2nJzA0mQPYUyfA6S-Iw4euVxhw';
+    //const sheet_url = 'https://docs.google.com/spreadsheets/d/ID';
     const sheet_name = 'linebot';
 
-    const SpreadSheet = SpreadsheetApp.openById('1pDSezVNvHjeMcVwEi2nJzA0mQPYUyfA6S-Iw4euVxhw');
+    const SpreadSheet = SpreadsheetApp.openById('ID');
     const reserve_list = SpreadSheet.getSheetByName(sheet_name);
 
     var current_list_row = reserve_list.getLastRow(); // 取得工作表最後一欄（ 直欄數 ）  
@@ -127,14 +127,18 @@ function doPost(e)  {  //當網頁有Post請求時就會依據網址來執行這
 
     //檢查是否已有加1
     //let all_members = reserve_list.getRange(1, 1, current_list_row+1, 1).getValues().flat();
-    let all_members = reserve_list.getRange('A1').getValues().flat();
-    let leaving_member_index = all_members.indexOf(reserve_name);  // 這裡回傳從0開始??
+    let all_members = reserve_list.getRange('A1:A').getValues().flat();
+    let leaving_member_index = all_members.indexOf(reserve_name); 
+
+
+
+    //reply_msg = format_text_message(leaving_member_index);
+    //send_to_line();
 
     if (leaving_member_index != -1) {
 
-
-    //reply_msg = format_text_message("leaving_member_index is " + leaving_member_index);
-    //send_to_line();
+     reply_msg = format_text_message(reserve_name + "已更新登記為" +  userMessage);
+     send_to_line();
 
       reserve_list.getRange(leaving_member_index +1, 1).setValue(reserve_name);
       reserve_list.getRange(leaving_member_index +1, 2).setValue(userMessage);
@@ -142,7 +146,10 @@ function doPost(e)  {  //當網頁有Post請求時就會依據網址來執行這
     }
     else {
       // 沒有記錄, 加在最後一行
-      
+
+	   reply_msg = format_text_message(reserve_name + "已登記" +  userMessage);
+     send_to_line();
+
       reserve_list.getRange(current_list_row + 1, 1).setValue(reserve_name);
       reserve_list.getRange(current_list_row + 1, 2).setValue(userMessage);
       //current_list_row = reserve_list.getLastRow();
@@ -150,8 +157,7 @@ function doPost(e)  {  //當網頁有Post請求時就會依據網址來執行這
 
 
 
-	   reply_msg = format_text_message(reserve_name + "已登記" +  userMessage);
-     send_to_line();
+
 	
 }
 
