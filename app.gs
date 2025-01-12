@@ -90,23 +90,32 @@ function doPost(e)  {  //當網頁有Post請求時就會依據網址來執行這
     }
   
   
-	var reserve_name = get_user_name();
+	  var reserve_name = get_user_name();
   
+
+    reply_message(replyToken,reserve_name); //使用reply_message這function來回覆訊息
+
     /*
     * Google Sheet 資料表資訊設定
     *
     * 將 sheet_url 改成你的 Google sheet 網址
     * 將 sheet_name 改成你的工作表名稱
     */
-   // const sheet_url = 'https://docs.google.com/spreadsheets/d/1pDSezVNvHjeMcVwEi2nJzA0mQPYUyfA6S-Iw4euVxhw';
-   // const sheet_name = 'linebot';
-   // const SpreadSheet = SpreadsheetApp.openByUrl(sheet_url);
-   // const reserve_list = SpreadSheet.getSheetByName(sheet_name);
-  
+    const sheet_url = 'https://docs.google.com/spreadsheets/d/1pDSezVNvHjeMcVwEi2nJzA0mQPYUyfA6S-Iw4euVxhw';
+    const sheet_name = 'linebot';
+
+    const SpreadSheet = SpreadsheetApp.openById('1pDSezVNvHjeMcVwEi2nJzA0mQPYUyfA6S-Iw4euVxhw');
+    const reserve_list = SpreadSheet.getSheetByName(sheet_name);
+    var current_list_row = reserve_list.getLastRow(); // 取得工作表最後一欄（ 直欄數 ）  
+
+    
+
+    reserve_list.getRange(current_list_row + 1, 1).setValue(reserve_name);
+    current_list_row = reserve_list.getLastRow();
   
   
 	//reply_message(replyToken,user_id); //使用reply_message這function來回覆訊息
 	
-	reply_message(replyToken,reserve_name); //使用reply_message這function來回覆訊息
+	
 }
 
